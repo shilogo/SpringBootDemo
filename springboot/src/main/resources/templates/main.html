@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <script type="text/javascript" th:src="@{jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{jquery.easyui.min.js}"></script>
+    <script type="text/javascript" th:src="@{locale/easyui-lang-zh_CN.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{themes/default/easyui.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{themes/icon.css}"/>
+     <script type="text/javascript">
+         var url;
+         function addTab(url, text, iconCls) {
+             var content = "<iframe frameborder=0 scrolling='auto' style='width:100%;height:100%' src=" + url + "></iframe>";
+             $("#tabs").tabs("add", {
+                 title: text,
+                 iconCls: iconCls,
+                 closable: true,
+                 content: content
+             });
+         }
+         function openTab(text, url, iconCls) {
+             if ($("#tabs").tabs("exists", text)) {
+                 $("#tabs").tabs("close", text);
+                 addTab(url, text, iconCls);
+                 $("#tabs").tabs("select", text);
+             } else {
+                 addTab(url, text, iconCls);
+             }
+         }
+
+         function openPasswordModifyDialog() {
+             $("#dlg").dialog("open").dialog("setTitle", "修改密码");
+             url = "${pageContext.request.contextPath}/user/modifyPassword.do?id=${currentUser.id}";
+         }
+
+     </script>
+
+</head>
+<body class="easyui-layout">
+<div region="north" style="height: 30px;background-color: #ffff">
+    <table width="100%">
+        <tr>
+            <td width="50%"></td>
+            <td valign="bottom"
+                style="font-size: 30px;color:#8B8B8B;font-family: '楷体';"
+                align="right" width="50%"><font size="3">&nbsp;&nbsp;<strong th:text="${name}"></strong></font>【管理员】
+            </td>
+        </tr>
+    </table>
+</div>
+<div region="center">
+    <div class="easyui-tabs" fit="true" border="false" id="tabs">
+        <div title="首页" data-options="iconCls:'icon-home'">
+            <div align="center" style="padding-top: 50px">
+                <font color="grey" size="10">首页</font>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div region="west" style="width: 200px;height:500px;" title="导航菜单"  split="true">
+    <div class="easyui-accordion">
+        <div title="书架管理" data-options="iconCls:'icon-shujias'"
+             style="padding:10px">
+            <a      href="javascript:openTab(' 书架管理','storeManage.jsp','icon-shujia')"
+                    class="easyui-linkbutton"
+                    data-options="plain:true,iconCls:'icon-shujia'"
+                    style="width: 150px;"> 书架管理
+            </a>
+        </div>
+        <div title="书籍管理" data-options="iconCls:'icon-shuji'"
+             style="padding:10px">
+            <a      href="javascript:openTab(' 全部书籍','allBooksManage','icon-shuben')"
+                    class="easyui-linkbutton"
+                    data-options="plain:true,iconCls:'icon-shuben'"
+                    style="width: 150px;">全部书籍
+            </a>
+        </div>
+        <div title="系统管理" data-options="iconCls:'icon-item'"
+             style="padding:10px;border:none;">
+            <a href="javascript:openTab(' 管理员列表','userManage.jsp','icon-lxr')" class="easyui-linkbutton"
+               data-options="plain:true,iconCls:'icon-lxr'" style="width: 150px;"> 管理员列表
+            </a>
+            <a href="javascript:openPasswordModifyDialog()" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-modifyPassword'"
+                 style="width: 150px;"> 修改密码
+            </a>
+            <a href="javascript:logout()" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-exit'"
+               style="width: 150px;"> 安全退出
+            </a>
+        </div>
+    </div>
+</div>
+
+<div id="dlg" class="easyui-dialog"
+     style="width: 500px;height:250px;padding: 10px 20px" closed="true"
+     buttons="#dlg-buttons">
+    <form id="fm" method="post">
+        <table cellspacing="8px">
+            <tr>
+                <td>用户名：</td>
+                <td ><input type="text" id="userName" name="name"
+                             th:value="${name}" readonly="readonly"
+                           style="width: 200px" />
+                </td>
+            </tr>
+            <tr>
+                <td>原密码：</td>
+                <td><input type="password" id="oldPassword"
+                           class="easyui-validatebox" required="true" style="width: 200px"/>
+                </td>
+            </tr>
+            <tr>
+                <td>新密码：</td>
+                <td><input type="password" id="newPassword" name="password"
+                           class="easyui-validatebox" required="true" style="width: 200px"/>
+                </td>
+            </tr>
+            <tr>
+                <td>确认新密码：</td>
+                <td><input type="password" id="newPassword2"
+                           class="easyui-validatebox" required="true" style="width: 200px"/>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+<div id="dlg-buttons">
+    <a href="javascript:modifyPassword()" class="easyui-linkbutton"iconCls="icon-ok">保存</a>
+    <a href="javascript:closePasswordModifyDialog()" class="easyui-linkbutton" iconCls="icon-cancel">关闭</a>
+</div>
+
+</body>
+</html>
