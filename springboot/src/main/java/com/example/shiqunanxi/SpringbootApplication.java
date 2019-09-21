@@ -3,11 +3,14 @@ package com.example.shiqunanxi;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @EnableScheduling
 @MapperScan(value="com.example.shiqunanxi.mapper")
+//开启缓存
+@EnableCaching
 public class SpringbootApplication {
 
     public static void main(String[] args) {
